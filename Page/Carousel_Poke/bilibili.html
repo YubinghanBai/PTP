@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bilibili</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+
+        }
+
+        .carousel-widget {
+            margin: 20px;
+            width: 80%;
+            max-width: 800px;
+
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 1/1;
+            border-radius: 5%;
+            box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .carousel-slides {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            background-color: antiquewhite;
+            transition: transform 0.5s ease
+        }
+
+        .carousel-slide {
+            
+            width: 100%;
+            height: 100%;
+            position: relative;
+
+        }
+        .carousel-slide img{
+            display: block;
+            width:100%;
+            height: 100%;
+            object-fit: cover;        }
+    </style>
+</head>
+
+<body>
+    <div class="carousel-widget">
+        <div class="carousel-container">
+            <div class="carousel-slides">
+                <div class="carousel-slide"><a href=""><img src="../Carousel_1/Albums/808s & Heartbreak.jpg" alt=""></a>
+                </div>
+                <div class="carousel-slide"><a href=""><img src="../Carousel_1/Albums/Ye.jpg" alt=""></a></div>
+                <div class="carousel-slide"><a href=""><img src="../Carousel_1/Albums/Donda.jpg" alt=""></a></div>
+                <div class="carousel-slide"><a href=""><img src="../Carousel_1/Albums/My Beautiful Dark Twisted Fantasy.jpg" alt=""></a></div>
+                <div class="carousel-slide"><a href=""><img src="../Carousel_1/Albums/Jesus Is King.jpg" alt=""></a></div>
+            </div>
+            <div class="carousel-footer">
+                <div class="carousel-footer-text">
+                    <a href="" target="_blank"><span class="carousel-footer-title"></span></a>
+                    <div class="carousel-dots"></div>
+                </div>
+            </div>
+            <div class="carousel-arrows"><button class="carousel-arrow prev">&lt;</button><button
+                    class="carousel-arrow next">&gt;</button></div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

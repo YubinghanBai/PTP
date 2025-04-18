@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carousel Template (Infinite Loop - Fixed Dots)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the carousel */
+        .carousel-container {
+            position: relative; /* Needed for absolute positioning of arrows/dots/footer */
+            overflow: hidden; /* Hide parts of slides that are outside the container */
+            border-radius: 0.5rem; /* Rounded corners for the main container */
+        }
+
+        .carousel-slides {
+            display: flex; /* Arrange slides horizontally */
+            /* Transition is now applied dynamically via JS */
+            width: 100%; /* Ensure slides container takes full width */
+        }
+
+        .carousel-slide {
+            min-width: 100%; /* Each slide takes the full width of the container */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            position: relative; /* For potential absolute elements inside a slide */
+            aspect-ratio: 16 / 9; /* Maintain aspect ratio, adjust as needed */
+            background-color: #f0f0f0; /* Fallback background */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #555;
+        }
+
+        .carousel-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Cover the slide area without distortion */
+            border-radius: 0.5rem; /* Match container rounding */
+        }
+
+        /* --- Footer --- */
+        .carousel-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            padding-bottom: 2.5rem; /* Extra padding to accommodate dots */
+            color: white;
+            z-index: 10; /* Ensure footer is above the slides */
+            pointer-events: none; /* Allow clicks to pass through to elements below if needed */
+        }
+
+        .carousel-footer-mask {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100%; /* Cover the entire footer area */
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0)); /* Gradient effect */
+            z-index: -1; /* Place mask behind the text */
+            border-bottom-left-radius: 0.5rem; /* Match container rounding */
+            border-bottom-right-radius: 0.5rem;
+        }
+
+        .carousel-footer-text {
+            position: relative; /* Needed for z-index if required */
+            pointer-events: auto; /* Make text links clickable */
+        }
+
+        .carousel-footer-title a {
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            color: white;
+            transition: color 0.3s;
+        }
+        .carousel-footer-title a:hover {
+            color: #a7a7a7; /* Lighter color on hover */
+        }
+
+
+        /* --- Dots --- */
+        .carousel-dots {
+            position: absolute;
+            bottom: 0.75rem; /* Position dots within the footer padding area */
+            left: 1rem; /* Align with footer text padding */
+            display: flex;
+            gap: 0.5rem; /* Space between dots */
+            z-index: 15; /* Above footer mask and text */
+        }
+
+        .carousel-dots-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            position: relative; /* For pseudo-elements if needed */
+            overflow: hidden; /* Hide the animated ::after element initially */
+        }
+
+        .carousel-dots-dot.is-active {
+             background-color: rgba(255, 255, 255, 0.9); /* More opaque white for active */
+        }
+
+        /* --- Arrows --- */
+        .carousel-arrows {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 0.5rem;
+            right: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            z-index: 15; /* Above slides and footer mask */
+            pointer-events: none; /* Allow clicks only on buttons */
+        }
+
+        .carousel-arrows button {
+            pointer-events: auto; /* Make buttons clickable */
+            background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent background */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 2.5rem; /* Size of the arrow buttons */
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            opacity: 0; /* Hidden by default */
+            transition: opacity 0.3s ease-in-out, background-color 0.3s;
+        }
+
+        .carousel-container:hover .carousel-arrows button {
+            opacity: 1; /* Show arrows on container hover */
+        }
+
+        .carousel-arrows button:hover {
+            background-color: rgba(0, 0, 0, 0.6); /* Darker background on hover */
+        }
+
+        .carousel-arrows button svg {
+            width: 1.5rem; /* Size of the SVG icon */
+            height: 1.5rem;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-100 p-10 font-['Inter',_sans-serif]">
+
+    <div class="max-w-3xl mx-auto">
+        <h1 class="text-2xl font-bold mb-4 text-center">Carousel Example (Infinite Loop - Fixed Dots)</h1>
+
+        <div id="myCarousel" class="carousel-container bg-white shadow-lg rounded-lg">
+            <div class="carousel-slides">
+                <div class="carousel-slide" data-title="Slide 1 Title: The Adventure Begins" data-link="#">
+                    <img src="https://placehold.co/800x450/f87171/white?text=Slide+1" alt="Slide 1" onerror="this.onerror=null;this.src='https://placehold.co/800x450/cccccc/ffffff?text=Image+Not+Found';">
+                </div>
+                <div class="carousel-slide" data-title="Slide 2 Title: Exploring New Worlds" data-link="#">
+                    <img src="https://placehold.co/800x450/60a5fa/white?text=Slide+2" alt="Slide 2" onerror="this.onerror=null;this.src='https://placehold.co/800x450/cccccc/ffffff?text=Image+Not+Found';">
+                </div>
+                <div class="carousel-slide" data-title="Slide 3 Title: Facing Challenges" data-link="#">
+                    <img src="https://placehold.co/800x450/34d399/white?text=Slide+3" alt="Slide 3" onerror="this.onerror=null;this.src='https://placehold.co/800x450/cccccc/ffffff?text=Image+Not+Found';">
+                </div>
+                <div class="carousel-slide" data-title="Slide 4 Title: Victory and Reflection" data-link="#">
+                    <img src="https://placehold.co/800x450/fbbf24/white?text=Slide+4" alt="Slide 4" onerror="this.onerror=null;this.src='https://placehold.co/800x450/cccccc/ffffff?text=Image+Not+Found';">
+                </div>
+                 <div class="carousel-slide" data-title="Slide 5 Title: Another Journey" data-link="#">
+                    <img src="https://placehold.co/800x450/a78bfa/white?text=Slide+5" alt="Slide 5" onerror="this.onerror=null;this.src='https://placehold.co/800x450/cccccc/ffffff?text=Image+Not+Found';">
+                </div>
+            </div>
+
+            <div class="carousel-footer">
+                <div class="carousel-footer-mask"></div>
+                <div class="carousel-footer-text">
+                    <div class="carousel-footer-title">
+                        <a href="#" target="_blank">
+                            <span id="carouselTitle">Slide Title Here</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="carousel-dots">
+                    </div>
+            </div>
+
+
+            <div class="carousel-arrows">
+                <button id="prevBtn" aria-label="Previous Slide">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15.4571 3.04289C15.8476 3.43342 15.8476 4.06658 15.4571 4.45711L8.09098 11.8232C7.99335 11.9209 7.99335 12.0791 8.09098 12.1768L15.4571 19.5429C15.8476 19.9334 15.8476 20.5666 15.4571 20.9571C15.0666 21.3476 14.4334 21.3476 14.0429 20.9571L6.67677 13.591C5.79809 12.7123 5.79809 11.2877 6.67677 10.409L14.0429 3.04289C14.4334 2.65237 15.0666 2.65237 15.4571 3.04289z"></path>
+                    </svg>
+                </button>
+                <button id="nextBtn" aria-label="Next Slide">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                         <path d="M8.5429 3.04289C8.15237 3.43342 8.15237 4.06658 8.5429 4.45711L15.909 11.8232C16.0066 11.9209 16.0066 12.0791 15.909 12.1768L8.5429 19.5429C8.15237 19.9334 8.15237 20.5666 8.5429 20.9571C8.93342 21.3476 9.56659 21.3476 9.95711 20.9571L17.3232 13.591C18.2019 12.7123 18.2019 11.2877 17.3232 10.409L9.95711 3.04289C9.56659 2.65237 8.93342 2.65237 8.5429 3.04289z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const carousel = document.getElementById('myCarousel');
+        const slidesContainer = carousel.querySelector('.carousel-slides');
+        const originalSlides = Array.from(slidesContainer.children); // Original slides from HTML
+        const prevButton = document.getElementById('prevBtn');
+        const nextButton = document.getElementById('nextBtn');
+        const dotsContainer = carousel.querySelector('.carousel-dots');
+        const titleElement = document.getElementById('carouselTitle');
+        const titleLinkElement = titleElement.parentElement; // Get the <a> tag
+
+        // Configuration
+        const originalSlideCount = originalSlides.length;
+        let currentIndex = 0; // Index of the currently visible slide (0 to originalSlideCount - 1)
+        let currentTransformIndex = 1; // Index used for translateX (0 is prepended clone, 1 is first real slide, ..., N+1 is appended clone)
+        let isTransitioning = false; // Flag to prevent rapid clicks during animation
+        let autoPlayInterval = null;
+        const autoPlayDelay = 5000; // Delay in milliseconds (5 seconds)
+        const transitionDuration = 500; // Must match CSS transition duration in ms
+
+        // --- Initialization ---
+
+        function init() {
+            setupInfiniteScroll();
+            createDots();
+            updateDotsAndTitle(); // Set initial dot/title state
+            startAutoPlay();
+
+            // Add event listeners
+            slidesContainer.addEventListener('transitionend', handleTransitionEnd);
+            nextButton.addEventListener('click', nextSlide);
+            prevButton.addEventListener('click', prevSlide);
+            carousel.addEventListener('mouseenter', pauseAutoPlay);
+            carousel.addEventListener('mouseleave', startAutoPlay);
+        }
+
+        function setupInfiniteScroll() {
+            // Clone first and last slides
+            const firstClone = originalSlides[0].cloneNode(true);
+            const lastClone = originalSlides[originalSlideCount - 1].cloneNode(true);
+
+            // Add clones to the container
+            slidesContainer.appendChild(firstClone); // Append first clone to the end
+            slidesContainer.insertBefore(lastClone, originalSlides[0]); // Prepend last clone to the beginning
+
+            // Set initial position (showing the *real* first slide) without transition
+            slidesContainer.style.transition = 'none';
+            slidesContainer.style.transform = `translateX(-${currentTransformIndex * 100}%)`;
+
+            // Force reflow/repaint to apply the transform instantly
+             void slidesContainer.offsetWidth;
+        }
+
+
+        // --- Navigation ---
+
+        // Main function to move to a specific slide using its logical index (0 to N-1)
+        function moveToSlide(logicalIndex) {
+            // Prevent action if already transitioning or clicking the current slide's dot
+            if (isTransitioning || logicalIndex === currentIndex) return;
+            isTransitioning = true;
+
+            currentIndex = logicalIndex; // Update logical index
+            currentTransformIndex = currentIndex + 1; // Calculate the target transform index
+
+            // Apply transition effect
+            slidesContainer.style.transition = `transform ${transitionDuration / 1000}s ease-in-out`;
+            slidesContainer.style.transform = `translateX(-${currentTransformIndex * 100}%)`;
+
+            updateDotsAndTitle(); // Update UI immediately
+            resetAutoPlay(); // Reset timer after manual interaction
+        }
+
+        // Function for the "Next" button
+        function nextSlide() {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
+            currentTransformIndex++; // Increment transform index first
+            currentIndex = (currentIndex + 1) % originalSlideCount; // Update logical index (wraps around)
+
+            // Apply transition effect
+            slidesContainer.style.transition = `transform ${transitionDuration / 1000}s ease-in-out`;
+            slidesContainer.style.transform = `translateX(-${currentTransformIndex * 100}%)`;
+
+            updateDotsAndTitle(); // Update UI immediately
+            resetAutoPlay();
+        }
+
+        // Function for the "Previous" button
+        function prevSlide() {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
+            currentTransformIndex--; // Decrement transform index first
+            currentIndex = (currentIndex - 1 + originalSlideCount) % originalSlideCount; // Update logical index (wraps around)
+
+            // Apply transition effect
+            slidesContainer.style.transition = `transform ${transitionDuration / 1000}s ease-in-out`;
+            slidesContainer.style.transform = `translateX(-${currentTransformIndex * 100}%)`;
+
+            updateDotsAndTitle(); // Update UI immediately
+            resetAutoPlay();
+        }
+
+        // --- Handle Loop Jump (After Transition Ends) ---
+
+        function handleTransitionEnd() {
+            // Check if we landed on a clone slide after the transition finished
+            if (currentTransformIndex === 0) { // Landed on the prepended clone (looks like the last slide)
+                slidesContainer.style.transition = 'none'; // Disable transition for the jump
+                currentTransformIndex = originalSlideCount; // Set index to the actual last slide
+                slidesContainer.style.transform = `translateX(-${currentTransformIndex * 100}%)`;
+                 void slidesContainer.offsetWidth; // Force reflow
+            } else if (currentTransformIndex === originalSlideCount + 1) { // Landed on the appended clone (looks like the first slide)
+                slidesContainer.style.transition = 'none'; // Disable transition for the jump
+                currentTransformIndex = 1; // Set index to the actual first slide
+                slidesContainer.style.transform = `translateX(-${currentTransformIndex * 100}%)`;
+                 void slidesContainer.offsetWidth; // Force reflow
+            }
+            // Transition finished (or jump completed), allow next move
+            isTransitioning = false;
+        }
+
+
+        // --- Update UI Elements ---
+
+        function updateDotsAndTitle() {
+            // Update pagination dots based on the logical currentIndex
+            const dots = dotsContainer.children;
+            Array.from(dots).forEach((dot, index) => {
+                if (index === currentIndex) {
+                    dot.classList.add('is-active');
+                } else {
+                    dot.classList.remove('is-active');
+                }
+            });
+
+            // Update footer title and link based on the logical currentIndex
+            const currentLogicalSlideElement = originalSlides[currentIndex]; // Get the original slide element
+            const title = currentLogicalSlideElement.getAttribute('data-title') || `Slide ${currentIndex + 1}`;
+            const link = currentLogicalSlideElement.getAttribute('data-link') || '#';
+
+            titleElement.textContent = title;
+            titleLinkElement.href = link;
+        }
+
+        // --- Create Dots ---
+
+        function createDots() {
+            dotsContainer.innerHTML = ''; // Clear existing dots
+            // Create dots only for the original number of slides
+            for (let i = 0; i < originalSlideCount; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('carousel-dots-dot');
+                // Add the click event listener to each dot
+                dot.addEventListener('click', () => {
+                    // Call moveToSlide with the logical index 'i' of the clicked dot
+                    // The check !isTransitioning && i !== currentIndex is now inside moveToSlide
+                    moveToSlide(i);
+                });
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        // --- AutoPlay ---
+
+        function startAutoPlay() {
+            pauseAutoPlay(); // Clear any existing interval first
+            autoPlayInterval = setInterval(nextSlide, autoPlayDelay);
+        }
+
+        function pauseAutoPlay() {
+            clearInterval(autoPlayInterval);
+        }
+
+        function resetAutoPlay() {
+            pauseAutoPlay();
+            startAutoPlay();
+        }
+
+        // --- Start the carousel ---
+        init();
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "ptp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YubinghanBai/PTP.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YubinghanBai/PTP/issues"
+  },
+  "homepage": "https://github.com/YubinghanBai/PTP#readme",
+  "description": "",
+  "dependencies": {
+    "simple-icons": "^14.12.2"
+  }
+}
