@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="tabs">
+      <h1 style="color: #fff;">Kanye West</h1>
+        <div class="card-container">
+          <div class="card-item card-active" id="tab1"><img src="../../../Page/Carousel_1/Albums/808s & Heartbreak.jpg" alt=""></div>
+          <div class="card-item" id="tab2"><img src="../../../Page/Carousel_1/Albums/Ye.jpg" alt=""></div>
+          <div class="card-item" id="tab3"><img src="../../../Page/Carousel_1/Albums/Yeezus.jpg" alt=""></div>
+          <div class="card-item" id="tab4"><img src="../../../Page/Carousel_1/Albums/Graduation.jpg" alt=""></div>
+          <div class="card-item" id="tab5"><img src="../../../Page/Carousel_1/Albums/My Beautiful Dark Twisted Fantasy.jpg" alt=""></div>
+          <div class="card-item" id="tab6"><img src="../../../Page/Carousel_1/Albums/Jesus Is King.jpg" alt=""></div>
+          <div class="card-item" id="tab7"><img src="../../../Page/Carousel_1/Albums/The College Dropout.jpg" alt=""></div>
+          <div class="card-item" id="tab8"><img src="../../../Page/Carousel_1/Albums/Vultures 1.jpg" alt=""></div>
+        </div>
+
+        <div class="tab-nav">
+          <div class="tab-btn btn-active" data-tab="tab1"><span class="btn-text">Tab 1</span></div>
+          <div class="tab-btn" data-tab="tab2"><span class="btn-text">Tab 2</span></div>
+          <div class="tab-btn" data-tab="tab3"><span class="btn-text">Tab 3</span></div>
+          <div class="tab-btn" data-tab="tab4"><span class="btn-text">Tab 4</span></div>
+          <div class="tab-btn" data-tab="tab5"><span class="btn-text">Tab 5</span></div>
+          <div class="tab-btn" data-tab="tab6"><span class="btn-text">Tab 6</span></div>
+          <div class="tab-btn" data-tab="tab7"><span class="btn-text">Tab 7</span></div>
+          <div class="tab-btn" data-tab="tab8"><span class="btn-text">Tab 8</span></div>
+        </div>
+      </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const cardItems = document.querySelectorAll('.card-item');
+        const tabNav = document.querySelector('.tab-nav');
+        
+        // 初始化导航指示器
+        function initIndicator() {
+            const activeBtn = document.querySelector('.btn-active');
+            if (activeBtn) {
+                const tabNavStyle = tabNav.style;
+                const activeBtnRect = activeBtn.getBoundingClientRect();
+                const tabNavRect = tabNav.getBoundingClientRect();
+                
+                // 设置指示器的初始位置和宽度
+                tabNav.style.setProperty('--indicator-left', `${activeBtn.offsetLeft}px`);
+                tabNav.style.setProperty('--indicator-width', `${activeBtn.offsetWidth}px`);
+                
+                // 应用样式到伪元素
+                document.documentElement.style.setProperty('--indicator-left', `${activeBtn.offsetLeft}px`);
+                document.documentElement.style.setProperty('--indicator-width', `${activeBtn.offsetWidth}px`);
+            }
+        }
+        
+        // 初始化
+        initIndicator();
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 移除所有按钮的active类
+                tabBtns.forEach(b => b.classList.remove('btn-active'));
+                // 给当前按钮添加active类
+                this.classList.add('btn-active');
+                
+                // 更新指示器位置
+                document.documentElement.style.setProperty('--indicator-left', `${this.offsetLeft}px`);
+                document.documentElement.style.setProperty('--indicator-width', `${this.offsetWidth}px`);
+                
+                // 获取当前按钮对应的tab
+                const tabId = this.getAttribute('data-tab');
+                
+                // 隐藏所有卡片
+                cardItems.forEach(card => {
+                    card.classList.remove('card-active');
+                });
+                
+                // 显示对应的卡片
+                const activeCard = document.getElementById(tabId);
+                if (activeCard) {
+                    activeCard.classList.add('card-active');
+                }
+            });
+        });
+        
+        // 窗口大小变化时重新计算指示器位置
+        window.addEventListener('resize', initIndicator);
+    });
+    </script>
+</body>
+</html>

@@ -160,3 +160,22 @@ nav a{
 ::view-transition-new(root){
     animation: 1.5s cubic-bezier(0.87,0,0.13,1) both move-in;
 }
+
+/* 更清晰的类名 */
+.nav-button {
+    width: 80%; /* 按钮宽度相对容器小一点 */
+    display: inline-block;
+    position: relative;
+    transform: translateY(0px);
+    will-change: transform;
+    text-decoration: none;
+    color: #242726;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.full-width-image {
+    width: 100%; /* 图片占满容器宽度 */
+    height: 100%;
+    object-fit: cover;
+}

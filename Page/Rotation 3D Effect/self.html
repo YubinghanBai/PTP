@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1d1e22;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .layer {
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            top: 0;
+            left: 0;
+            
+        }
+
+        .can-container {
+            position: relative;
+            width: 200px;
+            overflow: hidden;
+
+        }
+
+        .can-img {
+            width: 100%;
+        }
+
+        .wrapper {
+            position: absolute;
+            height: 90%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -53%);
+            mix-blend-mode: multiply;
+        }
+
+        .text {
+            font-family: poppins;
+            font-size: 175px;
+            font-weight: 500;
+            color: rgb(255, 213, 159);
+            position: absolute;
+           
+        }
+
+
+        #layer1 {
+            background-color: rgb(255, 239, 219);
+        }
+
+        .fruits {
+            position: absolute;
+            display: none;
+
+        }
+
+        .fruits img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #layer1 .fruits img:nth-child(1) {
+            width: 225px;
+            translate: 200px -160px
+        }
+
+        #layer1 .fruits img:nth-child(2) {
+            width: 180px;
+            translate: -180px 120px
+        }
+
+        #layer1 .fruits img:nth-child(3) {
+            width: 100px;
+            transform: rotate(-30deg);
+            translate: -200px -150px
+        }
+        #toggle{
+            display: none;
+        }
+        #toggle:checked ~ #layer1 .can-container .wrapper{
+            left:-50%;
+        }
+        #toggle:checked ~ #layer1 .text{
+            translate:150% 0;
+        }
+
+        .
+    </style>
+</head>
+
+<body>
+    <input type="checkbox" id="toggle" >
+    <div class="layer" id="layer1">
+        <div class="text">Orange</div>
+        <div class="can-container">
+            <img src="./images/can 2.png" alt="" class="can-img">
+            <img src="./images/Contents.png" alt="" class="wrapper">
+
+        </div>
+        <div class="fruits">
+            <img src="./images/orange-1.png" alt="">
+            <img src="./images/orange-2.png" alt="">
+            <img src="./images/orange-3.png" alt="">
+        </div>
+        <label for="toggle">Click to Slide</label>
+
+    </div>
+    <div class="layer" id="layer2">
+        <div class="text">Pineapple</div>
+        <div class="can-container">
+            <img src="./images/can 2.png" alt="" class="can-img">
+            <img src="./images/Contents-2.png" alt="" class="wrapper">
+
+        </div>
+        <div class="fruits">
+            <img src="./images/pineapple-1.png" alt="">
+            <img src="./images/pineapple-2.png" alt="">
+            <img src="./images/pineapple-3.png" alt="">
+        </div>
+        <label for="toggle">Click to Slide</label>
+    </div>
+    
+</body>
+
+</html>
